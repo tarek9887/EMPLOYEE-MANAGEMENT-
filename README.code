@@ -1,0 +1,395 @@
+
+#include <iostream>
+#include <conio.h>
+#include <windows.h>
+#include <string>
+
+using namespace std;
+
+class Node {
+public:
+    string Emp_Id, Name, Post, Department;
+    float Salary;
+    Node* Next_Add;
+};
+
+class Employee {
+private:
+    Node* Head;
+
+public:
+    Employee();
+    void Introduction();
+    void Login();
+    void Control_Panel();
+    void Insert();
+    void Search_Id();
+    void Edit();
+    void Del();
+    void Display();
+    void Salary_slip();
+    void Search_Dept();
+};
+
+Employee::Employee() {
+    Head = nullptr;
+}
+
+void Employee::Introduction() {
+    system("cls");
+    cout << "\n\n\n\n\n\n\n";
+    cout << "\t\t\t=======================";
+    cout << "\n\t\t\t=======================";
+    cout << "\n\n\t\t\t  EMPLOYEE MANAGEMENT SYSTEM ";
+    cout << "\n\n\n\t\t\tVERSION : 1.1";
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\t\t\t=======================";
+    getch();
+}
+
+void Employee::Login() {
+    string user, pass;
+    while (true) {
+        system("cls");
+        cout << "\n\n";
+        cout << "\t\t\t=======================";
+        cout << "\n\n\t\t\tLOGIN PANEL ";
+        cout << "\n\n\t\t\t=======================";
+        cout << "\n\n\n ENTER USER NAME : ";
+        cin >> user;
+        cout << "\n\n ENTER PASSWORD : ";
+
+        for (int i = 1; i <= 6; i++) {
+            pass += getch();
+            cout << "*";
+        }
+
+        if (user == "Tarek" && pass == "123456") {
+            cout << "\n\n\n\t\t\t CONGRATULATIONS: LOGIN SUCCESS";
+            cout << "\n\n\n\t\t\t LOADING";
+            for (int i = 1; i <= 6; i++) {
+                Sleep(500);
+                cout << ".";
+            }
+            Control_Panel();
+        } else {
+            cout << "\n\n\nUSERNAME & PASSWORD ARE WRONG!";
+            getch();
+        }
+    }
+}
+
+void Employee::Control_Panel() {
+    while (true) {
+        system("cls");
+        int x;
+
+        cout << "\n\n\t\t\t=======================";
+        cout << "\n\n\t\t\t EMPLOYEE CONTROL PANEL";
+        cout << "\n\n\t\t\t=======================";
+        cout << "\n\n  1. INSERT RECORD";
+        cout << "\n  2. SEARCH RECORD";
+        cout << "\n  3. EDIT RECORD";
+        cout << "\n  4. DELETE RECORD";
+        cout << "\n  5. DISPLAY RECORD";
+        cout << "\n  6. SALARY SLIP";
+        cout << "\n  7. SEARCH DEPARTMENT";
+        cout << "\n  8. EXIT";
+        cout << "\n\n YOUR CHOICE: ";
+
+        cin >> x;
+        switch (x) {
+            case 1:
+                Insert();
+                break;
+            case 2:
+                Search_Id();
+                break;
+            case 3:
+                Edit();
+                break;
+            case 4:
+                Del();
+                break;
+            case 5:
+                Display();
+                break;
+            case 6:
+                Salary_slip();
+                break;
+            case 7:
+                Search_Dept();
+                break;
+            case 8:
+                exit(0);
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+        getch();
+    }
+}
+
+void Employee::Insert() {
+    system("cls");
+    Node* New_Node = new Node;
+
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\n\t\t\t INSERT EMPLOYEE RECORD";
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\n EMPLOYEE ID :  ";
+    cin >> New_Node->Emp_Id;
+    cout << "\n\n EMPLOYEE NAME :  ";
+    cin >> New_Node->Name;
+    cout << "\n\n EMPLOYEE POST :  ";
+    cin >> New_Node->Post;
+    cout << "\n\n EMPLOYEE DEPARTMENT :  ";
+    cin >> New_Node->Department;
+    cout << "\n\n EMPLOYEE SALARY :  ";
+    cin >> New_Node->Salary;
+    New_Node->Next_Add = nullptr;
+
+    if (Head == nullptr) {
+        Head = New_Node;
+    } else {
+        Node* ptr = Head;
+        while (ptr != nullptr) {
+            if (New_Node->Emp_Id == ptr->Emp_Id) {
+                cout << "\n\n **DUPLICATE EMPLOYEE RECORD";
+                delete New_Node;
+                getch();
+                return;
+            }
+            ptr = ptr->Next_Add;
+        }
+        ptr = Head;
+        while (ptr->Next_Add != nullptr) {
+            ptr = ptr->Next_Add;
+        }
+        ptr->Next_Add = New_Node;
+    }
+    cout << "\n\n **EMPLOYEE RECORD INSERTED";
+}
+
+void Employee::Search_Id() {
+    system("cls");
+    int found = 0;
+    string EmpId;
+
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\n\t\t\t SEARCH EMPLOYEE RECORD";
+    cout << "\n\n\t\t\t=======================";
+
+    if (Head == nullptr) {
+        cout << "\n\n  **LINKED LIST IS EMPTY";
+    } else {
+        cout << "\n\n  EMPLOYEE ID FOR SEARCH: ";
+        cin >> EmpId;
+        Node* ptr = Head;
+
+        while (ptr != nullptr) {
+            if (EmpId == ptr->Emp_Id) {
+                system("cls");
+                cout << "\n\n\t\t\t=======================";
+                cout << "\n\n\t\t\t SEARCH EMPLOYEE RECORD";
+                cout << "\n\n\t\t\t=======================";
+                cout << "\n\n\t\t\t EMPLOYEE ID: " << ptr->Emp_Id;
+                cout << "\n\n\t\t\t EMPLOYEE NAME: " << ptr->Name;
+                cout << "\n\n\t\t\t EMPLOYEE POST: " << ptr->Post;
+                cout << "\n\n\t\t\t EMPLOYEE DEPARTMENT: " << ptr->Department;
+                cout << "\n\n\t\t\t EMPLOYEE SALARY: " << ptr->Salary;
+                found++;
+            }
+            ptr = ptr->Next_Add;
+        }
+        if (found == 0) {
+            cout << "\n\n **EMPLOYEE ID NOT FOUND";
+        }
+    }
+}
+
+void Employee::Edit() {
+    system("cls");
+    int found = 0;
+    string EmpId;
+
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\n\t\t\t    MODIFY EMPLOYEE RECORD";
+    cout << "\n\n\t\t\t=======================";
+
+    if (Head == nullptr) {
+        cout << "\n\n  **LINKED LIST IS EMPTY";
+    } else {
+        cout << "\n\n  EMPLOYEE ID FOR MODIFY: ";
+        cin >> EmpId;
+        Node* ptr = Head;
+        while (ptr != nullptr) {
+            if (EmpId == ptr->Emp_Id) {
+                cout << "\n\n  EMPLOYEE NAME: ";
+                cin >> ptr->Name;
+                cout << "\n\n  EMPLOYEE POST: ";
+                cin >> ptr->Post;
+                cout << "\n\n  EMPLOYEE DEPARTMENT: ";
+                cin >> ptr->Department;
+                cout << "\n\n  EMPLOYEE SALARY: ";
+                cin >> ptr->Salary;
+                cout << "\n\n **EMPLOYEE RECORD MODIFIED";
+                found++;
+            }
+            ptr = ptr->Next_Add;
+        }
+        if (found == 0) {
+            cout << "\n\n **EMPLOYEE ID NOT FOUND";
+        }
+    }
+}
+
+void Employee::Del() {
+    system("cls");
+    int found = 0;
+    string EmpId;
+
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\n\t\t\t   DELETE EMPLOYEE RECORD";
+    cout << "\n\n\t\t\t=======================";
+
+    if (Head == nullptr) {
+        cout << "\n\n  **LINKED LIST IS EMPTY";
+    } else {
+        cout << "\n\n  EMPLOYEE ID FOR DELETION: ";
+        cin >> EmpId;
+
+        if (EmpId == Head->Emp_Id) {
+            Node* ptr = Head;
+            Head = Head->Next_Add;
+            delete ptr;
+            cout << "\n\n  **EMPLOYEE RECORD DELETED";
+        } else {
+            Node* pre = Head;
+            Node* ptr = Head;
+
+            while (ptr != nullptr) {
+                if (EmpId == ptr->Emp_Id) {
+                    pre->Next_Add = ptr->Next_Add;
+                    cout << "\n\n  **EMPLOYEE RECORD DELETED";
+                    found++;
+                    delete ptr;
+                    break;
+                }
+                pre = ptr;
+                ptr = ptr->Next_Add;
+            }
+            if (found == 0) {
+                cout << "\n\n **EMPLOYEE ID NOT FOUND";
+            }
+        }
+    }
+}
+
+void Employee::Display() {
+    system("cls");
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\n\t\t\t   DISPLAY EMPLOYEE RECORD";
+    cout << "\n\n\t\t\t=======================";
+
+    if (Head == nullptr) {
+        cout << "\n\n  **LINKED LIST IS EMPTY";
+    } else {
+        Node* ptr = Head;
+        while (ptr != nullptr) {
+            cout << "\n\n\t\t\t EMPLOYEE ID: " << ptr->Emp_Id;
+            cout << "\n\n\t\t\t EMPLOYEE NAME: " << ptr->Name;
+            cout << "\n\n\t\t\t EMPLOYEE POST: " << ptr->Post;
+            cout << "\n\n\t\t\t EMPLOYEE DEPARTMENT: " << ptr->Department;
+            cout << "\n\n\t\t\t EMPLOYEE SALARY: " << ptr->Salary;
+            cout << "\n\n ===========================";
+            cout << "\n ===========================";
+            ptr = ptr->Next_Add;
+        }
+    }
+}
+
+void Employee::Salary_slip() {
+    system("cls");
+    int found = 0;
+    string EmpId;
+
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\n\t\t\t   SALARY SLIP GENERATOR";
+    cout << "\n\n\t\t\t=======================";
+
+    if (Head == nullptr) {
+        cout << "\n\n  **LINKED LIST IS EMPTY";
+    } else {
+        cout << "\n\n   EMPLOYEE ID FOR SLIP: ";
+        cin >> EmpId;
+        Node* ptr = Head;
+
+        while (ptr != nullptr) {
+            if (EmpId == ptr->Emp_Id) {
+                system("cls");
+                cout << "\n\n\t\t\t*";
+                cout << "\n\n\t\t\t**                                                   **";
+                cout << "\n\n\t\t\t**       EMPLOYEE SALARY SLIP       **";
+                cout << "\n\n\t\t\t**                                                   **";
+                cout << "\n\n\t\t\t*";
+                cout << "\n\n\t\t\t EMPLOYEE ID:             " << ptr->Emp_Id;
+                cout << "\n\n\t\t\t EMPLOYEE NAME:         " << ptr->Name;
+                cout << "\n\n\t\t\t EMPLOYEE POST:           " << ptr->Post;
+                cout << "\n\n\t\t\t EMPLOYEE DEPARTMENT: " << ptr->Department;
+                cout << "\n\n\t\t\t EMPLOYEE SALARY:         " << ptr->Salary;
+                cout << "\n\n\t\t\t**";
+                cout << "\n\t\t\t*";
+                found++;
+            }
+            ptr = ptr->Next_Add;
+        }
+        if (found == 0) {
+            cout << "\n\n **EMPLOYEE ID NOT FOUND";
+        }
+    }
+}
+
+void Employee::Search_Dept() {
+    system("cls");
+    int found = 0;
+    string dept;
+
+    cout << "\n\n\t\t\t=======================";
+    cout << "\n\n\t\t\t   SEARCH DEPARTMENT RECORD";
+    cout << "\n\n\t\t\t=======================";
+
+    if (Head == nullptr) {
+        cout << "\n\n  **LINKED LIST IS EMPTY";
+    } else {
+        cout << "\n\n  DEPARTMENT NAME FOR SEARCH: ";
+        cin >> dept;
+        Node* ptr = Head;
+
+        while (ptr != nullptr) {
+            if (dept == ptr->Department) {
+                cout << "\n\n\t\t\t EMPLOYEE ID: " << ptr->Emp_Id;
+                cout << "\n\n\t\t\t EMPLOYEE NAME: " << ptr->Name;
+                cout << "\n\n\t\t\t EMPLOYEE POST: " << ptr->Post;
+                cout << "\n\n\t\t\t EMPLOYEE DEPARTMENT: " << ptr->Department;
+                cout << "\n\n\t\t\t EMPLOYEE SALARY: " << ptr->Salary;
+                cout << "\n\n=======================";
+                cout << "\n=======================";
+                found++;
+            }
+            ptr = ptr->Next_Add;
+        }
+        if (found == 0) {
+            cout << "\n\n  **DEPARTMENT NAME NOT FOUND";
+        } else {
+            cout << "\n\n  TOTAL EMPLOYEES: " << found;
+        }
+    }
+}
+
+int main() {
+    Employee obj;
+    obj.Introduction();
+    obj.Login();
+    return 0;
+}
+
